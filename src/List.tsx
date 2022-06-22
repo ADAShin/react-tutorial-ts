@@ -1,12 +1,14 @@
 import { FC } from 'react';
 
-const languages: string[] = ['JavaScript', 'C++', 'Ruby', 'Java', 'PHP', 'Go'];
+type Props = {
+  langs: string[];
+};
 
-export const List: FC = () => {
+export const List: FC<Props> = ({ langs }) => {
   return (
     <div>
-      {languages.map((language, index) => (
-        <div key={index}>{language}</div>
+      {langs.map((lang, index) => (
+        <div key={index}>{lang}</div>
       ))}
     </div>
   );

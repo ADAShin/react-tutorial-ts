@@ -1,5 +1,32 @@
-import { FC } from 'react';
+import React, { FC, useState } from 'react';
 
-export const Form: FC = () => {
-  return <div>フォームです</div>;
+type Props = {
+  onAddLang: (lang: string) => void;
+};
+
+export const Form: FC<Props> = ({ onAddLang }) => {
+  const [text, setText] = useState('');
+
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onAddLang(text);
+  };
+
+  return (
+    <div>
+      <h4>新しい言語の追加</h4>
+      <form onSubmit={submitForm}>
+        <div>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </div>
+        <div>
+          <button>追加</button>
+        </div>
+      </form>
+    </div>
+  );
 };
