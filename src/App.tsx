@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { getLanguages } from './const/language';
 import { Form } from './Form';
+import { WithLoadingInjectedProps, withLoading } from './hoc/withLoader';
 import { List } from './List';
 
 type TabStateType = 'list' | 'form';
@@ -30,18 +31,11 @@ const HeaderLi = styled.li<CustomLiProps>`
   border-bottom: ${(props) => (props.focused ? '2px solid #F44336' : 'none')};
 `;
 
-function App() {
-  const [tab, setTab] = useState<TabStateType>('list');
-  const [langs, setLangs] = useState<string[]>([]);
+type AppProps = { hoge: string } & WithLoadingInjectedProps<string[]>;
 
-  useEffect(() => {
-    console.log('App.tsx:useEffect');
-    const fetchLanguages = async () => {
-      const languages = await getLanguages();
-      setLangs(languages);
-    };
-    void fetchLanguages();
-  }, []);
+const App: FC<AppProps> = ({ data, hoge }) => {
+  const [tab, setTab] = useState<TabStateType>('list');
+  const [langs, setLangs] = useState(data);
 
   const addlangs = (newLang: string) => {
     setLangs([...langs, newLang]);
@@ -50,6 +44,7 @@ function App() {
 
   return (
     <div>
+      {hoge}
       <Header>
         <HeaderUl>
           <HeaderLi focused={tab === 'list'} onClick={() => setTab('list')}>
@@ -63,6 +58,6 @@ function App() {
       {tab === 'list' ? <List langs={langs} /> : <Form onAddLang={addlangs} />}
     </div>
   );
-}
+};
 
-export default App;
+export default withLoading(App, getLanguages);
