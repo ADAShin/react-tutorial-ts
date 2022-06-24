@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Button } from './components/Button';
 import { TabBodyContainer } from './components/TabBodyContainer';
+import { FormModal } from './FormModal';
 
 const Label = styled.label`
   display: flex;
@@ -31,10 +32,11 @@ type Props = {
 
 export const Form: FC<Props> = ({ onAddLang }) => {
   const [text, setText] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onAddLang(text);
+    setShowModal(true);
   };
 
   return (
@@ -52,6 +54,12 @@ export const Form: FC<Props> = ({ onAddLang }) => {
           <FormButton>追加</FormButton>
         </ButtonContainer>
       </form>
+      {showModal && (
+        <FormModal
+          confirm={() => onAddLang(text)}
+          cancel={() => setShowModal(false)}
+        />
+      )}
     </TabBodyContainer>
   );
 };
