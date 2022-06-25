@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Button } from './components/Button';
 import { TabBodyContainer } from './components/TabBodyContainer';
 import { FormModal } from './FormModal';
+import { Hint } from './Hint';
 
 const Label = styled.label`
   display: flex;
@@ -49,6 +50,7 @@ export const Form: FC<Props> = ({ onAddLang }) => {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
+          <Hint />
         </div>
         <ButtonContainer>
           <FormButton>追加</FormButton>
