@@ -1,8 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { ThemeContext, ThemeType } from '../context/ThemeContext';
 
-const LoadDiv = styled.div`
+type ThemeProps = {
+  customeTheme: ThemeType;
+};
+
+const LoadDiv = styled.div<ThemeProps>`
+  height: 100%;
   padding: 36px;
+  color: ${({ customeTheme }) => customeTheme.color};
+  background-color: ${({ customeTheme }) => customeTheme.backgroundColor};
 `;
 
 export type WithLoadingInjectedProps<T> = {
@@ -15,6 +23,7 @@ export function withLoading<
 >(WrappedComponent: React.ComponentType<P>, fetchData: () => Promise<T>) {
   return (props: Omit<P, keyof WithLoadingInjectedProps<T>>) => {
     const [data, setData] = useState<T | null>(null);
+    const [theme] = useContext(ThemeContext);
 
     useEffect(() => {
       const fetchLanguages = async () => {
@@ -24,7 +33,7 @@ export function withLoading<
       void fetchLanguages();
     }, []);
 
-    const Loading = <LoadDiv>ロード中...</LoadDiv>;
+    const Loading = <LoadDiv customeTheme={theme}>ロード中...</LoadDiv>;
 
     return data ? <WrappedComponent {...(props as P)} data={data} /> : Loading;
   };

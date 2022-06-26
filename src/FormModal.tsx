@@ -1,13 +1,21 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { Button } from './components/Button';
 import { Modal } from './components/Modal';
+import { ThemeContext, THEMES, ThemeType } from './context/ThemeContext';
 
-const Container = styled.div`
+type ThemeProps = {
+  customTheme: ThemeType;
+};
+
+const Container = styled.div<ThemeProps>`
   width: 240px;
   border-radius: 10px;
   padding: 24px 36px;
-  background-color: white;
+  color: ${({ customTheme }) => customTheme.color};
+  background-color: ${({ customTheme }) => customTheme.backgroundColor};
+  border ${({ customTheme }) =>
+    customTheme === THEMES.dark ? '2px solid white' : 'none'};
 `;
 
 const ButtonWrapper = styled.div`
@@ -22,9 +30,10 @@ type Props = {
 };
 
 export const FormModal: FC<Props> = ({ confirm, cancel }) => {
+  const [theme] = useContext(ThemeContext);
   return (
     <Modal>
-      <Container>
+      <Container customTheme={theme}>
         <div>本当に作成しますか?</div>
         <ButtonWrapper>
           <Button onClick={cancel}>Cancel</Button>
